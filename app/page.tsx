@@ -1,110 +1,129 @@
-"use client"; // Required for useState to work
+"use client"; // Required for useState hooks
 
 import React, { useState } from "react";
 
 // I found the 'Rest Countries' API on the GitHub public-apis list.
-// It is free, public, and does not require an API key.
-// I created this interface to define the data structure I need (Slide 16).
+// It is free, public, HTTPS, and Auth: No.
+
+// I updated the interface to include a few more interesting details (Capital, Subregion)
+// to make the app look more complete. (Slide 16: Interfaces)
 interface Country {
   name: {
-    common: string; // The common name of the country
+    common: string;
     official: string;
   };
   region: string;
+  subregion?: string; // Some records might not have this
   population: number;
+  capital?: string[]; // Capital is an array, and might be missing for some entries
   flags: {
-    png: string; // URL for the flag image
-    alt: string; // Description for accessibility
+    png: string;
+    alt: string;
   };
 }
 
 export default function Home() {
-  // --- STATE (Slide 40) ---
-  // Stores the user's search input
+  // --- STATE MANAGEMENT (Slide 40) ---
   const [countryName, setCountryName] = useState<string>("");
-  
-  // Stores the result from the API
   const [countries, setCountries] = useState<Country[]>([]);
   
-  // UX states: loading spinner and error messages
+  // UX states for a better user experience
   const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<string>("");
 
-  // This function fetches data when the form is submitted
+  // --- API HANDLER ---
   const searchCountry = async (e: React.FormEvent) => {
-    e.preventDefault(); // Stop page reload
+    e.preventDefault(); // Prevent page reload
 
-    if (!countryName) return; // Do nothing if input is empty
+    // Basic validation: don't search if empty
+    if (!countryName.trim()) return; 
 
-    // Resetting states before the new search
     setLoading(true);
     setError("");
-    setCountries([]);
+    setCountries([]); // Clear previous results
 
     try {
-      // Using fetch() to connect to the API (Slide 110)
-      // I am using the 'name' endpoint to search by country name.
+      // Fetching data from the RestCountries API (Slide 110)
       const response = await fetch(
         `https://restcountries.com/v3.1/name/${countryName}`
       );
 
-      // Checking for 404 Not Found or other errors
+      // Handling errors (like 404 Not Found)
       if (!response.ok) {
-        throw new Error("Country not found. Please check your spelling.");
+        throw new Error("Country not found. Please check the spelling.");
       }
 
       const data = await response.json();
-      setCountries(data); // Updating state with the new data
+      // We might get multiple results (e.g. searching "United" returns US, UK, UAE...)
+      // So I'm storing the whole array.
+      setCountries(data);
     } catch (err: any) {
-      // If something breaks, show the error message to the user
-      setError(err.message || "Something went wrong.");
+      setError(err.message || "An unexpected error occurred.");
     } finally {
-      setLoading(false); // Stop loading animation
+      setLoading(false); // Stop loading spinner
     }
   };
 
   return (
-    // Semantic HTML: using 'main' for the primary content
+    // Semantic HTML structure
     <main className="container">
-      <header>
-        <h1>World Country Search 🌍</h1>
-        <p>Enter a name to find country details.</p>
+      <header className="app-header">
+        <h1>🌎 Global Explorer</h1>
+        <p>Discover facts about countries around the world.</p>
       </header>
 
-      {/* Input Section */}
-      <section className="search-area">
+      {/* Search Section */}
+      <section className="search-container">
         <form onSubmit={searchCountry} className="search-form">
           <input
             type="text"
-            placeholder="e.g. Canada, Japan..."
+            // Added better placeholder text for guidance
+            placeholder="Enter country name (e.g., Japan, France, Brazil)..."
             value={countryName}
-            // Controlled component: updating state on change
+            // Controlled input binding
             onChange={(e) => setCountryName(e.target.value)}
-            className="input-box"
+            className="main-input"
           />
-          <button type="submit" disabled={loading} className="btn-search">
-            {loading ? "Loading..." : "Search"}
+          <button type="submit" disabled={loading} className="search-button">
+            {loading ? "Searching..." : "Find Country"}
           </button>
         </form>
-        {/* Conditional rendering for errors */}
-        {error && <p className="error-text">{error}</p>}
+        
+        {/* Error Message Display */}
+        {error && <div className="error-message">⚠️ {error}</div>}
       </section>
 
       {/* Results Section */}
-      <section className="results">
-        {/* Mapping through the results array (Slide 33) */}
+      <section className="results-grid">
+        {/* Using map to render the list of countries (Slide 33) */}
         {countries.map((country, index) => (
           <article key={index} className="country-card">
-            {/* Displaying the flag image */}
-            <img 
-              src={country.flags.png} 
-              alt={country.flags.alt || "Country Flag"} 
-              className="flag"
-            />
-            <div className="info">
+            <div className="flag-container">
+              <img 
+                src={country.flags.png} 
+                alt={country.flags.alt || `Flag of ${country.name.common}`} 
+                className="flag-image"
+              />
+            </div>
+            <div className="card-details">
               <h2>{country.name.common}</h2>
-              <p><strong>Region:</strong> {country.region}</p>
-              <p><strong>Population:</strong> {country.population.toLocaleString()}</p>
+              <p className="official-name">{country.name.official}</p>
+              
+              <div className="stats-grid">
+                {/* Using conditional checks for optional fields like capital */}
+                <div className="stat-item">
+                  <strong>🏛️ Capital:</strong> {country.capital ? country.capital[0] : 'N/A'}
+                </div>
+                <div className="stat-item">
+                  <strong>📍 Region:</strong> {country.region}
+                </div>
+                <div className="stat-item">
+                  <strong>🗺️ Subregion:</strong> {country.subregion || 'N/A'}
+                </div>
+                <div className="stat-item">
+                  <strong>👥 Population:</strong> {country.population.toLocaleString()}
+                </div>
+              </div>
             </div>
           </article>
         ))}
