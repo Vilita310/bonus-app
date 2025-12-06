@@ -1,4 +1,4 @@
-/* Basic Reset */
+/* Resetting default browser styles */
 * {
   box-sizing: border-box;
   margin: 0;
@@ -6,182 +6,188 @@
 }
 
 body {
-  /* Using a clean, modern system font stack */
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-  background-color: #f4f7f9;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  /* Added a soft gradient background to make it look professional */
+  background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
   color: #333;
-  padding: 30px 20px;
-  line-height: 1.5;
+  min-height: 100vh;
 }
 
-.container {
-  max-width: 900px;
-  margin: 0 auto;
-}
-
-/* --- Header Styling --- */
-.app-header {
-  text-align: center;
-  margin-bottom: 40px;
-}
-
-.app-header h1 {
-  color: #2c3e50;
-  font-size: 2.5rem;
-  margin-bottom: 10px;
-}
-
-.app-header p {
-  color: #666;
-  font-size: 1.1rem;
-}
-
-/* --- Search Section Styling --- */
-.search-container {
-  margin-bottom: 50px;
+/* Main Container: Used Flexbox to center content vertically and horizontally */
+.main-container {
+  min-height: 100vh;
   display: flex;
   flex-direction: column;
   align-items: center;
+  padding: 40px 20px;
+}
+
+/* --- HERO SECTION (Centered Search) --- */
+.hero-section {
+  text-align: center;
+  margin-bottom: 50px;
+  width: 100%;
+  max-width: 800px;
+  /* Added a slide-down animation */
+  animation: fadeInDown 0.8s ease-out;
+}
+
+.title {
+  font-size: 3.5rem; /* Made the title huge */
+  color: #2c3e50;
+  margin-bottom: 10px;
+  font-weight: 800;
+}
+
+.subtitle {
+  font-size: 1.2rem;
+  color: #555;
+  margin-bottom: 40px;
 }
 
 .search-form {
   display: flex;
   gap: 15px;
-  width: 100%;
-  max-width: 700px; /* Made the form area wider */
   justify-content: center;
+  /* Making the form responsive on mobile */
+  flex-wrap: wrap;
 }
 
-/* The main input box - bigger and better looking */
-.main-input {
-  flex-grow: 1; /* Takes up remaining space */
-  padding: 15px 20px;
-  font-size: 18px; /* Larger text */
-  border: 2px solid #e0e0e0;
-  border-radius: 30px; /* Rounded corners */
-  outline: none;
-  transition: all 0.3s ease;
-  box-shadow: 0 4px 6px rgba(0,0,0,0.05);
-}
-
-.main-input:focus {
-  border-color: #0070f3;
-  box-shadow: 0 4px 12px rgba(0, 112, 243, 0.2);
-}
-
-.search-button {
-  padding: 15px 30px;
-  font-size: 18px;
-  font-weight: bold;
-  background-color: #0070f3;
-  color: white;
+/* The Big Input Field */
+.big-input {
+  padding: 20px 30px;
+  font-size: 1.2rem;
   border: none;
-  border-radius: 30px;
-  cursor: pointer;
-  transition: background-color 0.2s;
-  white-space: nowrap; /* Prevents text wrapping on small screens */
-}
-
-.search-button:hover {
-  background-color: #0056b3;
-}
-
-.search-button:disabled {
-  background-color: #a0c4e8;
-  cursor: not-allowed;
-}
-
-.error-message {
-  margin-top: 20px;
-  padding: 15px;
-  background-color: #fff2f0;
-  border: 1px solid #ffccc7;
-  color: #d32f2f;
-  border-radius: 8px;
+  border-radius: 50px;
   width: 100%;
-  max-width: 700px;
-  text-align: center;
+  max-width: 500px; /* Limits width on large screens */
+  box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+  outline: none;
+  transition: transform 0.2s, box-shadow 0.2s;
 }
 
-/* --- Results Grid Styling --- */
-.results-grid {
+.big-input:focus {
+  transform: scale(1.02);
+  box-shadow: 0 15px 30px rgba(0, 112, 243, 0.2);
+}
+
+/* The Big Search Button */
+.big-button {
+  padding: 20px 40px;
+  font-size: 1.2rem;
+  font-weight: bold;
+  color: white;
+  background-color: #0070f3;
+  border: none;
+  border-radius: 50px;
+  cursor: pointer;
+  box-shadow: 0 10px 25px rgba(0, 112, 243, 0.3);
+  transition: background 0.3s, transform 0.2s;
+}
+
+.big-button:hover {
+  background-color: #0056b3;
+  transform: translateY(-2px);
+}
+
+.big-button:disabled {
+  background-color: #a0a0a0;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.error-card {
+  margin-top: 20px;
+  padding: 15px 25px;
+  background-color: #ffecec;
+  color: #d32f2f;
+  border-radius: 12px;
+  border: 1px solid #ffcdd2;
+  font-weight: bold;
+  display: inline-block;
+}
+
+/* --- RESULTS SECTION --- */
+.results-container {
+  width: 100%;
+  max-width: 1000px;
   display: grid;
-  /* Responsive grid: fits as many cards as possible */
-  grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+  /* Responsive grid: Creates as many columns as fit */
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
   gap: 30px;
+  animation: fadeInUp 0.5s ease-out;
 }
 
-/* Improved Card Styling */
 .country-card {
   background: white;
-  border-radius: 16px;
+  border-radius: 20px;
   overflow: hidden;
-  box-shadow: 0 10px 20px rgba(0,0,0,0.08);
-  transition: transform 0.2s;
-  display: flex;
-  flex-direction: column;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+  transition: transform 0.3s;
 }
 
 .country-card:hover {
-  transform: translateY(-5px); /* Subtle lift effect on hover */
+  transform: translateY(-10px); /* Lifts the card up on hover */
 }
 
-.flag-container {
+.flag-wrapper {
   height: 200px;
-  background-color: #f0f0f0;
+  background-color: #eaeaea;
   display: flex;
-  justify-content: center;
   align-items: center;
-  border-bottom: 1px solid #eee;
+  justify-content: center;
+  overflow: hidden;
 }
 
-.flag-image {
+.flag-img {
   width: 100%;
   height: 100%;
   object-fit: cover;
 }
 
-.card-details {
+.info-wrapper {
   padding: 25px;
 }
 
-.card-details h2 {
-  color: #0070f3;
-  margin-bottom: 5px;
+.info-wrapper h2 {
+  font-size: 1.5rem;
+  margin-bottom: 15px;
+  color: #333;
 }
 
-.official-name {
-  font-size: 0.9rem;
-  color: #777;
-  font-style: italic;
+.tags {
+  display: flex;
+  gap: 10px;
   margin-bottom: 20px;
 }
 
-/* Grid inside the card for neat data alignment */
-.stats-grid {
-  display: grid;
-  grid-template-columns: 1fr 1fr; /* Two columns */
-  gap: 15px;
-  font-size: 0.95rem;
-}
-
-.stat-item strong {
-  display: block;
-  color: #555;
+.tag {
+  background-color: #e1f5fe;
+  color: #0288d1;
+  padding: 5px 12px;
+  border-radius: 15px;
   font-size: 0.85rem;
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
+  font-weight: bold;
 }
 
-/* Responsive adjustments for smaller screens */
-@media (max-width: 600px) {
-  .search-form {
-    flex-direction: column; /* Stack input and button on mobile */
-  }
-  .search-button {
-    width: 100%;
-  }
-  .stats-grid {
-    grid-template-columns: 1fr; /* Single column stats on mobile */
-  }
+.tag.secondary {
+  background-color: #f3e5f5;
+  color: #7b1fa2;
+}
+
+.stats p {
+  margin: 8px 0;
+  font-size: 1rem;
+  color: #555;
+}
+
+/* Simple Animations */
+@keyframes fadeInDown {
+  from { opacity: 0; transform: translateY(-20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes fadeInUp {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
 }
