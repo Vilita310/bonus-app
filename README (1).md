@@ -1,6 +1,4 @@
-# 🌍 Global Explorer — Project Report  
-*By Jing Cao*
-
+# 🌍 Global Explorer
 Global Explorer is a simple yet visually engaging web application that allows users to search for any country and instantly view details such as its national flag, capital, region, and population. This project was built as part of my learning practice with **Next.js**.
 
 ---
