@@ -1,107 +1,113 @@
-"use client"; // This is required because we are using hooks like useState
+"use client"; // Required for useState to work
 
 import React, { useState } from "react";
 
-// Defining the shape of the API data using an Interface
-// This ensures TypeScript knows what fields to expect.
-interface University {
-  name: string;
-  country: string;
-  web_pages: string[];
+// I found the 'Rest Countries' API on the GitHub public-apis list.
+// It is free, public, and does not require an API key.
+// I created this interface to define the data structure I need (Slide 16).
+interface Country {
+  name: {
+    common: string; // The common name of the country
+    official: string;
+  };
+  region: string;
+  population: number;
+  flags: {
+    png: string; // URL for the flag image
+    alt: string; // Description for accessibility
+  };
 }
 
 export default function Home() {
-  // State for the user's input (country name)
-  const [search, setSearch] = useState<string>("");
+  // --- STATE (Slide 40) ---
+  // Stores the user's search input
+  const [countryName, setCountryName] = useState<string>("");
   
-  // State to store the list of universities from the API
-  const [universities, setUniversities] = useState<University[]>([]);
+  // Stores the result from the API
+  const [countries, setCountries] = useState<Country[]>([]);
   
-  // UX states for loading and errors
+  // UX states: loading spinner and error messages
   const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<string>("");
 
-  // Function to fetch data from the API
-  const handleSearch = async (e: React.FormEvent) => {
-    e.preventDefault(); // Prevent the form from refreshing the page
+  // This function fetches data when the form is submitted
+  const searchCountry = async (e: React.FormEvent) => {
+    e.preventDefault(); // Stop page reload
 
-    if (!search) return;
+    if (!countryName) return; // Do nothing if input is empty
 
+    // Resetting states before the new search
     setLoading(true);
     setError("");
-    setUniversities([]); // Clear previous results
+    setCountries([]);
 
     try {
-      // Using the free Hipolabs API (no key required)
+      // Using fetch() to connect to the API (Slide 110)
+      // I am using the 'name' endpoint to search by country name.
       const response = await fetch(
-        `https://universities.hipolabs.com/search?country=${search}`
+        `https://restcountries.com/v3.1/name/${countryName}`
       );
 
+      // Checking for 404 Not Found or other errors
       if (!response.ok) {
-        throw new Error("Failed to fetch data");
+        throw new Error("Country not found. Please check your spelling.");
       }
 
       const data = await response.json();
-
-      if (data.length === 0) {
-        setError("No universities found. Please check the spelling.");
-      } else {
-        setUniversities(data);
-      }
-    } catch (err) {
-      setError("Something went wrong with the API connection.");
+      setCountries(data); // Updating state with the new data
+    } catch (err: any) {
+      // If something breaks, show the error message to the user
+      setError(err.message || "Something went wrong.");
     } finally {
-      // Always turn off loading spinner
-      setLoading(false);
+      setLoading(false); // Stop loading animation
     }
   };
 
   return (
+    // Semantic HTML: using 'main' for the primary content
     <main className="container">
-      {/* Semantic HTML header */}
-      <header className="header">
-        <h1>Global University Finder 🎓</h1>
-        <p>Enter a country to see a list of universities.</p>
+      <header>
+        <h1>World Country Search 🌍</h1>
+        <p>Enter a name to find country details.</p>
       </header>
 
-      {/* Search Input Section */}
-      <section className="search-section">
-        <form onSubmit={handleSearch} className="search-form">
+      {/* Input Section */}
+      <section className="search-area">
+        <form onSubmit={searchCountry} className="search-form">
           <input
             type="text"
-            placeholder="e.g. Canada, Japan, France..."
-            value={search}
-            onChange={(e) => setSearch(e.target.value)}
-            className="input-field"
+            placeholder="e.g. Canada, Japan..."
+            value={countryName}
+            // Controlled component: updating state on change
+            onChange={(e) => setCountryName(e.target.value)}
+            className="input-box"
           />
-          <button type="submit" disabled={loading} className="search-btn">
-            {loading ? "Searching..." : "Search"}
+          <button type="submit" disabled={loading} className="btn-search">
+            {loading ? "Loading..." : "Search"}
           </button>
         </form>
+        {/* Conditional rendering for errors */}
         {error && <p className="error-text">{error}</p>}
       </section>
 
       {/* Results Section */}
-      <section className="results-section">
-        {universities.length > 0 && (
-          <p className="result-count">Found {universities.length} universities:</p>
-        )}
-        
-        <ul className="uni-list">
-          {/* Mapping through the array to render list items */}
-          {universities.map((uni, index) => (
-            <li key={index} className="uni-card">
-              <h3>{uni.name}</h3>
-              <p>📍 {uni.country}</p>
-              {/* Checking if web_pages exists before rendering */}
-              {uni.web_pages && uni.web_pages[0] && (
-                <a href={uni.web_pages[0]} target="_blank" rel="noreferrer">
-                  Visit Website &rarr;
-                </a>
-              )}
-            </li>
-          ))}
-        </ul>
+      <section className="results">
+        {/* Mapping through the results array (Slide 33) */}
+        {countries.map((country, index) => (
+          <article key={index} className="country-card">
+            {/* Displaying the flag image */}
+            <img 
+              src={country.flags.png} 
+              alt={country.flags.alt || "Country Flag"} 
+              className="flag"
+            />
+            <div className="info">
+              <h2>{country.name.common}</h2>
+              <p><strong>Region:</strong> {country.region}</p>
+              <p><strong>Population:</strong> {country.population.toLocaleString()}</p>
+            </div>
+          </article>
+        ))}
       </section>
     </main>
   );
