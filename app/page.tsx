@@ -34,7 +34,7 @@ export default function Home() {
     try {
       // Using the free Hipolabs API (no key required)
       const response = await fetch(
-        `http://universities.hipolabs.com/search?country=${search}`
+        `https://universities.hipolabs.com/search?country=${search}`
       );
 
       if (!response.ok) {
