@@ -136,16 +136,4 @@ You can deploy this project using **Vercel**:
 
 https://nextjs.org/docs/app/building-your-application/deploying
 
----
 
-## 🎓 Final Reflection
-
-Although the project looks simple, I learned a lot throughout the process:
-
-- How to think through small design details  
-- How to avoid layout breaking under different conditions  
-- How to build a smooth and clean search experience  
-- How to stay patient through frustrating UI bugs 😭  
-
-Now, the interface feels polished and stable.  
-This was a meaningful hands-on project that improved my skills in both coding and design.
