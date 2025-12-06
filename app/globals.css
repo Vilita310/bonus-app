@@ -1,4 +1,4 @@
-/* Resetting default browser styles */
+/* Basic reset to remove default browser margins */
 * {
   box-sizing: border-box;
   margin: 0;
@@ -6,188 +6,96 @@
 }
 
 body {
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-  /* Added a soft gradient background to make it look professional */
-  background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+  font-family: Arial, Helvetica, sans-serif;
+  background-color: #f0f2f5;
   color: #333;
-  min-height: 100vh;
-}
 
-/* Main Container: Used Flexbox to center content vertically and horizontally */
-.main-container {
+  /* Center everything vertically + horizontally */
   min-height: 100vh;
   display: flex;
-  flex-direction: column;
+  justify-content: center;
   align-items: center;
-  padding: 40px 20px;
+
+  padding: 0;
 }
 
-/* --- HERO SECTION (Centered Search) --- */
-.hero-section {
+/* Center container */
+.container {
+  max-width: 700px;
   text-align: center;
-  margin-bottom: 50px;
-  width: 100%;
-  max-width: 800px;
-  /* Added a slide-down animation */
-  animation: fadeInDown 0.8s ease-out;
 }
 
-.title {
-  font-size: 3.5rem; /* Made the title huge */
-  color: #2c3e50;
+header h1 {
   margin-bottom: 10px;
-  font-weight: 800;
+  color: #2c3e50;
 }
 
-.subtitle {
-  font-size: 1.2rem;
-  color: #555;
-  margin-bottom: 40px;
+/* Search area spacing */
+.search-area {
+  margin: 30px 0;
 }
 
 .search-form {
   display: flex;
-  gap: 15px;
+  gap: 12px;
   justify-content: center;
-  /* Making the form responsive on mobile */
-  flex-wrap: wrap;
 }
 
-/* The Big Input Field */
-.big-input {
-  padding: 20px 30px;
-  font-size: 1.2rem;
-  border: none;
-  border-radius: 50px;
-  width: 100%;
-  max-width: 500px; /* Limits width on large screens */
-  box-shadow: 0 10px 25px rgba(0,0,0,0.1);
-  outline: none;
-  transition: transform 0.2s, box-shadow 0.2s;
+/* Bigger search input */
+.input-box {
+  padding: 14px 18px;
+  font-size: 18px;
+  border: 1px solid #bbb;
+  border-radius: 8px;
+  width: 300px;
 }
 
-.big-input:focus {
-  transform: scale(1.02);
-  box-shadow: 0 15px 30px rgba(0, 112, 243, 0.2);
-}
-
-/* The Big Search Button */
-.big-button {
-  padding: 20px 40px;
-  font-size: 1.2rem;
-  font-weight: bold;
-  color: white;
+/* Bigger search button */
+.btn-search {
+  padding: 14px 26px;
+  font-size: 18px;
   background-color: #0070f3;
+  color: white;
   border: none;
-  border-radius: 50px;
+  border-radius: 8px;
   cursor: pointer;
-  box-shadow: 0 10px 25px rgba(0, 112, 243, 0.3);
-  transition: background 0.3s, transform 0.2s;
 }
 
-.big-button:hover {
-  background-color: #0056b3;
-  transform: translateY(-2px);
+.btn-search:disabled {
+  background-color: #aaa;
 }
 
-.big-button:disabled {
-  background-color: #a0a0a0;
-  cursor: not-allowed;
-  transform: none;
+.error-text {
+  color: red;
+  margin-top: 10px;
 }
 
-.error-card {
-  margin-top: 20px;
-  padding: 15px 25px;
-  background-color: #ffecec;
-  color: #d32f2f;
-  border-radius: 12px;
-  border: 1px solid #ffcdd2;
-  font-weight: bold;
-  display: inline-block;
-}
-
-/* --- RESULTS SECTION --- */
-.results-container {
-  width: 100%;
-  max-width: 1000px;
+/* Country results */
+.results {
   display: grid;
-  /* Responsive grid: Creates as many columns as fit */
-  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-  gap: 30px;
-  animation: fadeInUp 0.5s ease-out;
+  gap: 20px;
 }
 
 .country-card {
   background: white;
-  border-radius: 20px;
-  overflow: hidden;
-  box-shadow: 0 10px 30px rgba(0,0,0,0.08);
-  transition: transform 0.3s;
-}
-
-.country-card:hover {
-  transform: translateY(-10px); /* Lifts the card up on hover */
-}
-
-.flag-wrapper {
-  height: 200px;
-  background-color: #eaeaea;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
   display: flex;
   align-items: center;
-  justify-content: center;
-  overflow: hidden;
+  gap: 20px;
+  text-align: left;
 }
 
-.flag-img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
+.flag {
+  width: 100px;
+  height: auto;
+  border: 1px solid #ddd;
+  border-radius: 4px;
 }
 
-.info-wrapper {
-  padding: 25px;
+.info h2 {
+  margin-bottom: 5px;
+  color: #0070f3;
 }
 
-.info-wrapper h2 {
-  font-size: 1.5rem;
-  margin-bottom: 15px;
-  color: #333;
-}
-
-.tags {
-  display: flex;
-  gap: 10px;
-  margin-bottom: 20px;
-}
-
-.tag {
-  background-color: #e1f5fe;
-  color: #0288d1;
-  padding: 5px 12px;
-  border-radius: 15px;
-  font-size: 0.85rem;
-  font-weight: bold;
-}
-
-.tag.secondary {
-  background-color: #f3e5f5;
-  color: #7b1fa2;
-}
-
-.stats p {
-  margin: 8px 0;
-  font-size: 1rem;
-  color: #555;
-}
-
-/* Simple Animations */
-@keyframes fadeInDown {
-  from { opacity: 0; transform: translateY(-20px); }
-  to { opacity: 1; transform: translateY(0); }
-}
-
-@keyframes fadeInUp {
-  from { opacity: 0; transform: translateY(20px); }
-  to { opacity: 1; transform: translateY(0); }
-}
